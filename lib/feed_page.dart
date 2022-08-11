@@ -45,7 +45,6 @@ class FeedPage extends StatelessWidget {
                   context,
                   MaterialPageRoute(builder: (context) => const CreateBlog()),
                 );
-                const Icon(Icons.add);
               }))
             ],
           )),
