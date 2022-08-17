@@ -1,4 +1,4 @@
-import 'package:blogpost/sign_up.dart';
+import 'package:blogpost/login_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,10 +10,12 @@ class BlogPost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: ThemeData(
+          scaffoldBackgroundColor: const Color.fromARGB(44, 205, 61, 61)),
       debugShowCheckedModeBanner: false,
       title: 'BlogPost',
-      home: SignUpPage(),
+      home: const LoginPage(),
     );
   }
 }

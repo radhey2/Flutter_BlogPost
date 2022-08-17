@@ -1,3 +1,4 @@
+import 'package:blogpost/feed_page.dart';
 import 'package:flutter/material.dart';
 
 class CreateBlog extends StatelessWidget {
@@ -7,6 +8,7 @@ class CreateBlog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 235, 127, 127),
         title: const Text('Create Your Blog'),
         actions: const [
           Padding(
@@ -33,7 +35,7 @@ class CreateBlog extends StatelessWidget {
               child: TextField(
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  label: Text('Author Name'),
+                  label: Text('Image url'),
                 ),
               ),
             ),
@@ -48,11 +50,21 @@ class CreateBlog extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
-            TextButton(onPressed: (() {}), child: const Text('submit')),
-            SizedBox(
-              height: 150,
-              width: MediaQuery.of(context).size.width * 0.1,
-              child: const Icon(Icons.add_a_photo),
+            TextButton(
+                onPressed: (() {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const FeedPage()),
+                  );
+                }),
+                child: const Text('submit')),
+            InkWell(
+              onTap: () {},
+              child: SizedBox(
+                height: 150,
+                width: MediaQuery.of(context).size.width * 0.1,
+                child: const Icon(Icons.add_a_photo),
+              ),
             )
           ]),
         ),
