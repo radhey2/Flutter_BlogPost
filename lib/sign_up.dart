@@ -77,7 +77,9 @@ class _SignUpPageState extends State<SignUpPage> {
             child: TextFormField(
               controller: firstNameController,
               decoration: const InputDecoration(
-                  border: OutlineInputBorder(), label: Text('FirstName')),
+                  prefixIcon: Icon(Icons.face),
+                  border: OutlineInputBorder(),
+                  label: Text('FirstName')),
             ),
           ),
           const SizedBox(
@@ -88,7 +90,9 @@ class _SignUpPageState extends State<SignUpPage> {
             child: TextFormField(
               controller: lastNameController,
               decoration: const InputDecoration(
-                  border: OutlineInputBorder(), label: Text('LastName')),
+                  prefixIcon: Icon(Icons.face),
+                  border: OutlineInputBorder(),
+                  label: Text('LastName')),
             ),
           ),
           const SizedBox(
@@ -102,6 +106,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 return value.validateAsEmail();
               },
               decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.email_rounded),
                 border: OutlineInputBorder(),
                 label: Text('Email'),
                 hintText: 'abcd@gmail.com',
@@ -119,6 +124,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 return value.validateAsPassword();
               },
               decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.password_sharp),
                 border: const OutlineInputBorder(),
                 label: const Text('Password'),
                 suffixIcon: InkWell(
@@ -151,26 +157,6 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             icon: const Icon(Icons.login),
             label: const Text('Sign Up'),
-          ),
-          const SizedBox(
-            height: 20.0,
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-              side: BorderSide(color: Theme.of(context).primaryColor),
-              borderRadius: BorderRadius.circular(8.0),
-            )),
-            onPressed: (() {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const FeedPage()),
-              );
-            }),
-            child: const Text('Sign up'),
-          ),
-          const SizedBox(
-            height: 20.0,
           ),
         ]),
       )),

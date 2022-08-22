@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:blogpost/Auth/modal.dart';
 import 'package:http/http.dart' as http;
 
 import '../Blogs/modal.dart';
@@ -12,6 +13,9 @@ class AuthRepository {
     return _instance!;
   }
 
+  User? _user;
+  User? get currentUser => _user;
+
   Future signIn({required String email, required String password}) async {
     final response = await http.post(
         Uri.parse('https://spiceblogserver-production.up.railway.app/login'),
@@ -22,7 +26,11 @@ class AuthRepository {
           },
         ));
 
-    return response.statusCode == 200;
+    if (response.statusCode == 200) {
+      _user = User.fromJson(jsonDecode(response.body));
+      return true;
+    }
+    return false;
   }
 
   Future<bool> signUp({
@@ -32,14 +40,15 @@ class AuthRepository {
     required String lastName,
   }) async {
     final response = await http.post(
-      Uri.parse('https://spiceblogserver-production.up.railway.app/signup'),
-      body: {
-        'email': email,
-        'password': password,
-        'firstName': firstName,
-        'lastName': lastName,
-      },
-    );
+        Uri.parse('https://spiceblogserver-production.up.railway.app/signup'),
+        body: jsonEncode(
+          {
+            'email': email,
+            'password': password,
+            'firstName': firstName,
+            'lastName': lastName,
+          },
+        ));
 
     return response.statusCode == 200;
   }

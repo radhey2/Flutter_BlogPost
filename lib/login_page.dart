@@ -70,7 +70,9 @@ class _LoginPageState extends State<LoginPage> {
                 return value.validateAsEmail();
               },
               decoration: const InputDecoration(
-                  border: OutlineInputBorder(), label: Text('UserName')),
+                  prefixIcon: Icon(Icons.email),
+                  border: OutlineInputBorder(),
+                  label: Text('UserName')),
             ),
           ),
           const SizedBox(
@@ -86,6 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                 return value.validateAsPassword();
               },
               decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.password),
                 border: const OutlineInputBorder(),
                 label: const Text('Password'),
                 suffixIcon: InkWell(

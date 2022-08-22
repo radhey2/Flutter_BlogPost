@@ -14,7 +14,8 @@ class BlogRepository {
 
   Future<List<Blog>> fetchAllBlogs() async {
     final res = await http.get(
-      Uri.parse('https://spiceblogserver-production.up.railway.app/addBlog'),
+      Uri.parse(
+          'https://spiceblogserver-production.up.railway.app/fetchAllBlogs'),
     );
     try {
       final data = json.decode(res.body);
@@ -26,8 +27,16 @@ class BlogRepository {
 
   Future<void> addBlog(Blog blog) async {
     final res = await http.post(
-        Uri.parse('https://spiceblogserver-production.up.railway.app/addblog'),
-        body: blog.toJson());
+        Uri.parse('https://spiceblogserver-production.up.railway.app/addBlog'),
+        body: jsonEncode(blog.toJson()));
     log(res.body);
+  }
+
+  Future<bool> deleteBlog(int id) async {
+    final res = await http.delete(
+      Uri.parse(
+          'https://spiceblogserver-production.up.railway.app/deleteBlog?id=$id'),
+    );
+    return res.statusCode == 200;
   }
 }

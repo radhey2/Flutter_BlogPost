@@ -4,8 +4,10 @@ class Blog {
   final String imageUrl;
   final Author author;
   final DateTime updatedAt;
+  final int? id;
 
   const Blog({
+    this.id,
     required this.title,
     required this.content,
     required this.imageUrl,
@@ -21,6 +23,7 @@ class Blog {
       };
 
   factory Blog.fromJson(Map<String, dynamic> json) => Blog(
+        id: json['id'],
         title: json['title'],
         content: json['content'],
         imageUrl: json['imageurl'],
