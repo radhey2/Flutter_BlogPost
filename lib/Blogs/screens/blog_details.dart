@@ -1,8 +1,8 @@
-import 'package:blogpost/Blogs/modal.dart';
+import 'package:blogpost/Blogs/datasource/modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
-import 'common_widget.dart';
+import '../../common_widget.dart';
 
 class BlogDetails extends StatelessWidget {
   final Blog blog;

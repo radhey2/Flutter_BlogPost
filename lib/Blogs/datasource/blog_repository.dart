@@ -1,28 +1,30 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
-
+import 'package:web_socket_channel/web_socket_channel.dart';
 import 'modal.dart';
 
 class BlogRepository {
   static BlogRepository? _instance;
+  WebSocketChannel? _channel;
   BlogRepository._(); // Private Constructor
   factory BlogRepository() {
     _instance ??= BlogRepository._(); // ??= is called Elvis Operator
+
+    _instance!._channel ??= WebSocketChannel.connect(
+        Uri.parse('wss://spiceblogserver-production.up.railway.app/ws'));
     return _instance!;
   }
 
-  Future<List<Blog>> fetchAllBlogs() async {
-    final res = await http.get(
-      Uri.parse(
-          'https://spiceblogserver-production.up.railway.app/fetchAllBlogs'),
-    );
-    try {
-      final data = json.decode(res.body);
-      return data.map<Blog>((e) => Blog.fromJson(e)).toList();
-    } catch (_) {
-      return <Blog>[];
-    }
+  Stream<List<Blog>> fetchAllBlogs() async* {
+    yield* _instance!._channel!.stream.map((event) {
+      try {
+        final data = json.decode(event);
+        return data.map<Blog>((e) => Blog.fromJson(e)).toList();
+      } catch (_) {
+        return <Blog>[];
+      }
+    });
   }
 
   Future<void> addBlog(Blog blog) async {

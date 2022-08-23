@@ -1,11 +1,10 @@
-import 'package:blogpost/Auth/auth_repo.dart';
-import 'package:blogpost/feed_page.dart';
-import 'package:blogpost/sign_up.dart';
-import 'package:blogpost/validators.dart';
+import 'package:blogpost/Blogs/screens/feed_page.dart';
+import 'package:blogpost/Auth/screens/sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 
-import 'common_widget.dart';
+import '../../common_widget.dart';
+import '../../sign_in_bloc.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -16,28 +15,20 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> formKey = GlobalKey();
-  final AuthRepository authRepository = AuthRepository();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passController = TextEditingController();
+  late final SignInBloc bloc;
 
   bool _showPassword = false;
 
-  Future<void> login() async {
-    if (await authRepository.signIn(
-        email: emailController.text, password: passController.text)) {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const FeedPage()));
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('User not found')));
-    }
+  @override
+  void initState() {
+    super.initState();
+    bloc = SignInBloc();
   }
 
   @override
   void dispose() {
-    emailController.dispose();
-    passController.dispose();
     super.dispose();
+    bloc.dispose();
   }
 
   @override
@@ -64,16 +55,18 @@ class _LoginPageState extends State<LoginPage> {
           const VerticalSpacing(),
           SizedBox(
             width: 300,
-            child: TextFormField(
-              controller: emailController,
-              validator: (value) {
-                return value.validateAsEmail();
-              },
-              decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.email),
-                  border: OutlineInputBorder(),
-                  label: Text('UserName')),
-            ),
+            child: StreamBuilder<String?>(
+                stream: bloc.email.obs$,
+                builder: (context, snapshot) {
+                  return TextFormField(
+                    onChanged: bloc.email.addValue,
+                    decoration: InputDecoration(
+                        errorText: snapshot.error as String?,
+                        prefixIcon: const Icon(Icons.email),
+                        border: const OutlineInputBorder(),
+                        label: const Text('UserName')),
+                  );
+                }),
           ),
           const SizedBox(
             height: 20.0,
@@ -81,28 +74,33 @@ class _LoginPageState extends State<LoginPage> {
           const VerticalSpacing(),
           SizedBox(
             width: 300,
-            child: TextFormField(
-              obscureText: !_showPassword,
-              controller: passController,
-              validator: (value) {
-                return value.validateAsPassword();
-              },
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.password),
-                border: const OutlineInputBorder(),
-                label: const Text('Password'),
-                suffixIcon: InkWell(
-                  child: _showPassword
-                      ? const Icon(Icons.visibility_off)
-                      : const Icon(Icons.visibility),
-                  onTap: () {
-                    setState(() {
-                      _showPassword = !_showPassword;
-                    });
-                  },
-                ),
-              ),
-            ),
+            child: StreamBuilder(
+                stream: bloc.password.obs$,
+                builder: (context, snapshot) {
+                  return StreamBuilder<bool>(
+                      stream: bloc.passwordObscure.obs$,
+                      initialData: true,
+                      builder: (context, obscureSnap) {
+                        return TextFormField(
+                          onChanged: bloc.password.addValue,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.password),
+                            border: const OutlineInputBorder(),
+                            label: const Text('Password'),
+                            suffixIcon: InkWell(
+                              child: !obscureSnap.data!
+                                  ? const Icon(Icons.visibility_off)
+                                  : const Icon(Icons.visibility),
+                              onTap: () {
+                                bloc.passwordObscure
+                                    .addValue(!obscureSnap.data!);
+                              },
+                            ),
+                            errorText: snapshot.error as String?,
+                          ),
+                        );
+                      });
+                }),
           ),
           const SizedBox(
             height: 20.0,
@@ -116,19 +114,34 @@ class _LoginPageState extends State<LoginPage> {
           const SizedBox(
             height: 20.0,
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-              side: BorderSide(color: Theme.of(context).cardColor),
-              borderRadius: BorderRadius.circular(8.0),
-            )),
-            onPressed: (() {
-              login();
-            }),
-            child: const Text(
-              'Login',
-            ),
-          ),
+          StreamBuilder<bool>(
+              stream: bloc.validInputObs$,
+              builder: (context, snapshot) {
+                final isValid = snapshot.data ?? false;
+                return ElevatedButton(
+                  onPressed: isValid
+                      ? () async {
+                          if (await bloc.signIn()) {
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => const FeedPage()));
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('User not found')),
+                            );
+                          }
+                        }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Theme.of(context).cardColor),
+                    borderRadius: BorderRadius.circular(8.0),
+                  )),
+                  child: const Text(
+                    'Login',
+                  ),
+                );
+              }),
           const SizedBox(
             height: 20.0,
           ),

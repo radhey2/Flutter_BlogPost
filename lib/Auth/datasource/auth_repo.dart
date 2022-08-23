@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:blogpost/Auth/modal.dart';
 import 'package:http/http.dart' as http;
 
-import '../Blogs/modal.dart';
+import '../../Blogs/datasource/modal.dart';
+import 'modal.dart';
 
 class AuthRepository {
   static AuthRepository? _instance;
