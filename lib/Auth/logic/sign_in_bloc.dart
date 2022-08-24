@@ -7,9 +7,9 @@ import 'package:blogpost/Auth/datasource/validators.dart';
 
 import 'package:rxdart/rxdart.dart';
 
-import 'Auth/datasource/auth_repo.dart';
-import 'observable.dart';
-import 'Auth/datasource/validators.dart';
+import '../datasource/auth_repo.dart';
+import '../../observable.dart';
+import '../datasource/validators.dart';
 
 class SignInBloc with Validators {
   SignInBloc() {

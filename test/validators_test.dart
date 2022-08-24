@@ -1,4 +1,4 @@
-import 'package:blogpost/validators.dart';
+import 'package:blogpost/Auth/logic/validators.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

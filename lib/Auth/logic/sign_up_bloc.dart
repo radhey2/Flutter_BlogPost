@@ -1,8 +1,8 @@
 import 'package:rxdart/rxdart.dart';
 
-import 'Auth/datasource/auth_repo.dart';
-import 'Auth/datasource/validators.dart';
-import 'observable.dart';
+import '../datasource/auth_repo.dart';
+import '../datasource/validators.dart';
+import '../../observable.dart';
 
 class SignUpBloc with Validators {
   late final Observable<String?> firstName;

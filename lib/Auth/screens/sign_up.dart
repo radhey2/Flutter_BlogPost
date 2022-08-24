@@ -2,10 +2,10 @@ import 'package:blogpost/Auth/datasource/auth_repo.dart';
 import 'package:blogpost/common_widget.dart';
 import 'package:blogpost/Blogs/screens/feed_page.dart';
 import 'package:blogpost/Auth/screens/login_page.dart';
-import 'package:blogpost/validators.dart';
+import 'package:blogpost/Auth/logic/validators.dart';
 import 'package:flutter/material.dart';
 
-import '../../sign_up_bloc.dart';
+import '../logic/sign_up_bloc.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);

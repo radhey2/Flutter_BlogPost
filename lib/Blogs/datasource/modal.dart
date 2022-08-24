@@ -1,4 +1,6 @@
-class Blog {
+import 'package:equatable/equatable.dart';
+
+class Blog with EquatableMixin {
   final String title;
   final String content;
   final String imageUrl;
@@ -30,9 +32,35 @@ class Blog {
         author: Author(email: json['email'], photoUrl: ""),
         updatedAt: DateTime.parse(json["updatedat"]),
       );
+
+  Blog copyWith({
+    int? id,
+    String? title,
+    String? content,
+    String? imageUrl,
+    Author? author,
+    DateTime? updatedAt,
+  }) =>
+      Blog(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        content: content ?? this.content,
+        imageUrl: imageUrl ?? this.imageUrl,
+        author: author ?? this.author,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
+
+  List<Object?> get props => [id, title, content, imageUrl, author, updatedAt];
+
+  @override
+  String toString() {
+    final map = toJson();
+    map['id'] = id;
+    return map.toString();
+  }
 }
 
-class Author {
+class Author with EquatableMixin {
   final String email;
   final String photoUrl;
 
@@ -40,4 +68,6 @@ class Author {
     required this.email,
     required this.photoUrl,
   });
+
+  List<Object?> get props => [email, photoUrl];
 }
